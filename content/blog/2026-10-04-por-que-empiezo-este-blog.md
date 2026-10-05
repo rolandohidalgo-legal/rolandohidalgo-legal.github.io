@@ -1,12 +1,14 @@
 ---
-title: Por qué empiezo este blog
-dek: Un video de un minuto obliga a recortar. Aquí explico con calma lo que en redes solo alcanzo a mencionar.
+title: "¿Quién empieza un blog en pleno 2026? "
+dek: Un video resulta demasiado corto, especialmente con el espacio de atención
+  del público en redes. Sin embargo, siempre hay algo más que decír, así que
+  este es su lugar.
 section: Personal
 date: 2026-10-04
-cover: ""
-cover_caption: ""
-sample: true
+cover: /images/portadas/screenshot12.png
+cover_caption: Revisando algún expediente, en mi oficina de Ibarra.
 draft: false
+sample: true
 ---
 Este es un texto de ejemplo. Sirve para ver cómo se lee un artículo en el sitio, y se reemplaza por la primera publicación real.
 
