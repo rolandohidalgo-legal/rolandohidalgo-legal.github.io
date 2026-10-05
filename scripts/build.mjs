@@ -196,7 +196,14 @@ fs.writeFileSync(path.join(OUT, 'blog', 'posts.json'), JSON.stringify(index, nul
 
 // ---------- 4. portada: etiquetas para redes ----------
 fs.writeFileSync(path.join(OUT, 'og', 'home.png'), await ogImage({ title: site.name, kicker: site.role || '', dek: site.bio || '', site, home: true }));
-const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8').replace('<!--META-->',
+const roles = (site.roles || []).map(String).filter(Boolean);
+const rolesHtml = roles.length
+  ? `<p class="roles"><span class="sr-only">${esc(roles.join(', '))}</span><span class="typed" id="typed" aria-hidden="true" data-roles="${esc(JSON.stringify(roles))}">${esc(roles[0])}</span><span class="caret" aria-hidden="true"></span></p>`
+  : '';
+const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8')
+  .replace('<!--ROLES-->', rolesHtml)
+  .replace('<!--TAGLINE-->', esc(site.tagline || site.bio || ''))
+  .replace('<!--META-->',
   socialMeta({ title: site.name, description: site.description || '', url: BASE + '/', image: `${BASE}/og/home.png`, type: 'website' }));
 fs.writeFileSync(path.join(OUT, 'index.html'), home);
 

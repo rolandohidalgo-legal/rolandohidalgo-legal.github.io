@@ -116,6 +116,11 @@ content:
       - { name: name, label: Nombre, type: string }
       - { name: url, label: Dirección del sitio, type: string, description: "No cambiar salvo que conectes un dominio propio." }
       - { name: role, label: Cargo corto, type: string }
+      - name: roles
+        label: Roles que se escriben bajo tu nombre (uno por línea, en orden)
+        type: string
+        list: true
+      - { name: tagline, label: Frase de presentación (bajo los roles), type: text }
       - { name: bio, label: Biografía corta (va al pie de cada artículo), type: text }
       - { name: description, label: Descripción para buscadores, type: text }
       - { name: email, label: Correo de contacto, type: string }

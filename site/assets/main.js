@@ -51,131 +51,38 @@
 
   SOURCES[0].icon = IG_ICON;
 
-  // Pestañas en forma de rueda. Con el puntero encima, la píldora se centra y su descripción
-  // aparece abajo (vista previa); el contenido solo cambia al hacer clic. La URL (#blog, #instagram…)
-  // recuerda la sección elegida.
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
-  var tabsEl = $('.tabs'), trackEl = $('.track'), hint = $('#hint');
-  var views = {};
-  tabs.forEach(function (t) { views[t.dataset.view] = document.getElementById('v-' + t.dataset.view); });
+  // Navegación con casillas tipo tabla periódica. Al pasar el puntero se muestra la descripción
+  // de la sección; al hacer clic cambia el contenido. La URL (#blog, #instagram…) recuerda la elección.
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.el'));
+  var hint = $('#hint'), views = {}, current = null, selected = tabs[0], capT = null;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var PAD = 24;
-  var current = null, selected = tabs[0], peekTab = null, leaveT = null, hoverMouse = false, capT = null, wheel = false;
-  var dwellT = null, px = 0, gate = null;
-  var DWELL = 140;                    // ms que el puntero debe quedarse sobre una opción para que la rueda la centre
-  var EDGE = 6;                       // tolerancia (px) alrededor de cada píldora, solo si el puntero no está sobre ninguna
-  var MOVE = 3;                       // movimiento mínimo (px) para cambiar de opción justo después de girar la rueda
   var sentinel = $('#tabs-sentinel'), tbar = $('#tabs-bar');
+  tabs.forEach(function (t) { views[t.dataset.view] = document.getElementById('v-' + t.dataset.view); });
 
-  // Al bajar, la barra se compacta: se oculta la leyenda y se afinan los márgenes
+  // Al bajar, la barra queda fija arriba en versión compacta (solo las dos letras)
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (e) {
       tbar.classList.toggle('stuck', !e[0].isIntersecting && e[0].boundingClientRect.top < 0);
     }).observe(sentinel);
   }
 
-  // Rueda: solo con mouse y cuando todas las opciones caben en la barra.
-  // En pantallas táctiles o angostas la barra se desliza con el dedo.
-  function slotW() { return (tabsEl.clientWidth - PAD * 2) / tabs.length; }
-  function setMode() {
-    tabsEl.style.setProperty('--tabs-w', tabsEl.clientWidth + 'px');
-    var w = matchMedia('(hover: hover) and (pointer: fine)').matches && slotW() >= 100;
-    wheel = w;
-    tabsEl.classList.toggle('wheel', w);
-    trackEl.style.transform = '';
-    tabsEl.scrollLeft = 0;
-  }
-  // Coloca la pista para que la píldora dada quede al centro (o en reposo si no hay ninguna)
-  function align(t, instant) {
-    if (wheel) {
-      if (!t) { trackEl.style.transform = ''; return; }
-      // Tras girar, el puntero puede quedar sobre otra píldora: se ignora el temblor mínimo del mouse
-      // hasta que haya un movimiento real, para que la rueda no siga girando sola.
-      if (hoverMouse) gate = px;
-      var c = t.offsetLeft + t.offsetWidth / 2;
-      trackEl.style.transform = 'translateX(' + (tabsEl.clientWidth / 2 - c) + 'px)';
-    } else if (t) {
-      var left = t.offsetLeft + t.offsetWidth / 2 - tabsEl.clientWidth / 2;
-      tabsEl.scrollTo({ left: left, behavior: (instant || reduced) ? 'auto' : 'smooth' });
-    }
-  }
   function setCaption(text) {
     if (!hint || hint.textContent === text) return;
     clearTimeout(capT);
     hint.classList.add('swap');
     capT = setTimeout(function () { hint.textContent = text; hint.classList.remove('swap'); }, reduced ? 0 : 140);
   }
-  function markPeek() { tabs.forEach(function (x) { x.classList.toggle('peek', x === peekTab && x !== selected); }); }
-  function peek(t, center) {
-    peekTab = t; markPeek();
-    setCaption(t.dataset.caption);
-    if (center) align(t);
-  }
-  function rest() {
-    clearTimeout(dwellT); gate = null;
-    peekTab = null; markPeek();
-    setCaption(selected.dataset.caption);
-    align(wheel ? null : selected);
-  }
-
-  // Píldora que realmente se ve bajo el puntero. Gana la que lo contiene; la tolerancia solo se usa si no hay ninguna.
-  function pillAt(x) {
-    var bar = tabsEl.getBoundingClientRect(), inside = null, id = Infinity, near = null, nd = Infinity;
-    tabs.forEach(function (t) {
-      var r = t.getBoundingClientRect();
-      if (r.right < bar.left || r.left > bar.right) return;                 // fuera de la barra
-      var c = Math.abs(x - (r.left + r.right) / 2);
-      if (x >= r.left && x <= r.right) { if (c < id) { id = c; inside = t; } }
-      else if (x >= r.left - EDGE && x <= r.right + EDGE) { if (c < nd) { nd = c; near = t; } }
+  tabs.forEach(function (t) {
+    t.addEventListener('pointerenter', function () { setCaption(t.dataset.caption); });
+    t.addEventListener('focus', function () { setCaption(t.dataset.caption); });
+    t.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (location.hash === '#' + t.dataset.view) show(t.dataset.view, true);
+      else location.hash = t.dataset.view;
     });
-    return inside || near;
-  }
-  function isCentered(t) {
-    var bar = tabsEl.getBoundingClientRect(), r = t.getBoundingClientRect();
-    return Math.abs((r.left + r.right) / 2 - (bar.left + bar.right) / 2) < 3;
-  }
-  tabsEl.addEventListener('pointerenter', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    hoverMouse = true; clearTimeout(leaveT); gate = null;
   });
-  tabsEl.addEventListener('pointermove', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    px = e.clientX;
-    if (!wheel) {
-      var h = e.target.closest ? e.target.closest('.tab') : null;
-      if (h && h !== peekTab) peek(h, false);
-      return;
-    }
-    if (gate !== null) { if (Math.abs(px - gate) < MOVE) return; gate = null; }
-    var t = pillAt(px);
-    if (!t) return;                                  // zona vacía: se mantiene la opción actual
-    if (t !== peekTab) peek(t, false);               // vista previa inmediata (descripción y resalte)
-    clearTimeout(dwellT);
-    if (!isCentered(t)) {                            // la rueda gira solo si el puntero se queda un momento
-      dwellT = setTimeout(function () { if (peekTab === t && hoverMouse && !isCentered(t)) align(t); }, DWELL);
-    }
-  });
-  tabsEl.addEventListener('pointerleave', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    hoverMouse = false; clearTimeout(dwellT); gate = null;
-    leaveT = setTimeout(rest, 160);
-  });
-  tabsEl.addEventListener('focusin', function (e) {
-    if (e.target.matches && e.target.matches(':focus-visible')) peek(e.target, true);
-  });
-  tabsEl.addEventListener('focusout', function (e) {
-    if (!tabsEl.contains(e.relatedTarget)) rest();
-  });
-  tabsEl.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('.tab') : null;
-    // En la rueda, el clic confirma la opción que está en vista previa, aunque la píldora ya no esté bajo el puntero
-    var t = (hoverMouse && wheel && peekTab) ? peekTab : a;
-    if (!t) return;
-    e.preventDefault();
-    if (location.hash === '#' + t.dataset.view) { show(t.dataset.view, true); return; }
-    location.hash = t.dataset.view;
-  });
-  window.addEventListener('resize', function () { setMode(); align(wheel ? peekTab : (peekTab || selected), true); });
+  var navEl = $('.elements');
+  if (navEl) navEl.addEventListener('pointerleave', function () { setCaption(selected.dataset.caption); });
 
   function show(id, scroll) {
     if (!views[id]) id = 'todo';
@@ -186,9 +93,7 @@
       t.setAttribute('aria-selected', on ? 'true' : 'false');
       if (on) selected = t;
     });
-    markPeek();
-    setCaption((peekTab || selected).dataset.caption);
-    align(wheel ? peekTab : (peekTab || selected), !scroll);
+    setCaption(selected.dataset.caption);
     Object.keys(views).forEach(function (k) {
       var v = views[k]; if (!v) return;
       var on = k === id;
@@ -200,15 +105,39 @@
   }
   function toBar() {
     var start = sentinel.getBoundingClientRect().top + window.scrollY;
-    if (window.scrollY > start) window.scrollTo({ top: start, behavior: 'smooth' });
+    if (window.scrollY > start) window.scrollTo({ top: start, behavior: reduced ? 'auto' : 'smooth' });
   }
   function fromHash() { return decodeURIComponent(location.hash.slice(1)) || 'todo'; }
   window.addEventListener('hashchange', function () { show(fromHash(), true); });
-  setMode();
   show(fromHash(), false);
   if (hint) hint.textContent = selected.dataset.caption;
-  align(wheel ? null : selected, true);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setMode(); align(wheel ? peekTab : (peekTab || selected), true); });
+
+  // Roles que se escriben y se borran bajo el nombre, como en una máquina de escribir
+  var typed = $('#typed');
+  if (typed) {
+    var roles = [];
+    try { roles = JSON.parse(typed.getAttribute('data-roles') || '[]'); } catch (e) {}
+    // Con "reducir movimiento" activado en el sistema, los roles se reemplazan sin efecto de escritura
+    if (roles.length > 1 && reduced) {
+      var rj = 0;
+      setInterval(function () { rj = (rj + 1) % roles.length; typed.textContent = roles[rj]; }, 3000);
+    } else if (roles.length > 1) {
+      var ri = 0, ci = roles[0].length, del = true;
+      var tick = function () {
+        var word = roles[ri];
+        if (del) {
+          ci--;
+          if (ci <= 0) { del = false; ri = (ri + 1) % roles.length; ci = 0; }
+        } else {
+          ci++;
+          if (ci >= roles[ri].length) { typed.textContent = roles[ri]; del = true; return setTimeout(tick, 2200); }
+        }
+        typed.textContent = roles[ri].slice(0, ci) || '​';
+        setTimeout(tick, del ? 38 : 75 + Math.random() * 45);
+      };
+      setTimeout(tick, 2600);
+    }
+  }
 
   Promise.all([getJSON('data/site.json'), getJSON('data/activity.json'), getJSON('blog/posts.json')].concat(SOURCES.map(function (src) { return getJSON(src.file); })))
     .then(function (r) {
@@ -246,7 +175,7 @@
       var a = el('a', null, l.label); a.href = l.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
       box.appendChild(a);
     });
-    if (site.email) { var m = $('#mail'); if (m) { m.textContent = site.email; m.href = 'mailto:' + site.email; } }
+    if (site.email) { var m = $('#mail'); if (m) { m.textContent = site.email; m.href = 'mailto:' + site.email; } var c = $('#cta-mail'); if (c) c.href = 'mailto:' + site.email; }
   }
 
   function meta(kind, date, extra, sample) {

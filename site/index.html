@@ -21,7 +21,12 @@
   </div>
   <header class="hero">
     <h1 class="title">Rolando Hidalgo<span class="dot">.</span></h1>
-    <p class="tagline">Abogado en Ecuador. Lo que escribo, lo que publico y lo que voy haciendo.</p>
+    <!--ROLES-->
+    <p class="tagline"><!--TAGLINE--></p>
+    <div class="cta">
+      <a class="btn solid" id="cta-mail" href="mailto:rolandohidalgo2009@gmail.com">Escríbeme</a>
+      <a class="btn" href="#blog">Leer artículos <span aria-hidden="true">→</span></a>
+    </div>
   </header>
 </div>
 
@@ -29,15 +34,25 @@
 <div class="tabs-bar" id="tabs-bar">
   <div class="col">
     <div class="tabs-in">
-      <nav class="tabs" role="tablist" aria-label="Secciones">
-        <div class="track">
-        <a class="tab" role="tab" href="#todo" data-view="todo" data-caption="Todo lo que publico, de lo más nuevo a lo más antiguo" aria-selected="true">Todo</a>
-        <a class="tab" role="tab" href="#blog" data-view="blog" data-caption="Lo que no cabe en un video" aria-selected="false">Blog</a>
-        <a class="tab" role="tab" href="#instagram" data-view="instagram" data-caption="Mis publicaciones, en un solo lugar" aria-selected="false">Instagram</a>
-        <a class="tab" role="tab" href="#tiktok" data-view="tiktok" data-caption="Mis videos, en un solo lugar" aria-selected="false">TikTok</a>
-        <a class="tab" role="tab" href="#actividad" data-view="actividad" data-caption="Lo más reciente, ordenado por fecha" aria-selected="false">Actividad</a>
-        <a class="tab" role="tab" href="#sobre-mi" data-view="sobre-mi" data-caption="Rigor técnico, lenguaje claro" aria-selected="false">Sobre mí</a>
-        </div>
+      <nav class="elements" role="tablist" aria-label="Secciones">
+        <a class="el" role="tab" href="#todo" data-view="todo" data-caption="Todo lo que publico, de lo más nuevo a lo más antiguo" aria-selected="true">
+          <span class="el-n">1</span><span class="el-sym">To</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></span><span class="el-name">Todo</span>
+        </a>
+        <a class="el" role="tab" href="#blog" data-view="blog" data-caption="Artículos: lo que no cabe en un video" aria-selected="false">
+          <span class="el-n">2</span><span class="el-sym">Bl</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="el-name">Blog</span>
+        </a>
+        <a class="el" role="tab" href="#instagram" data-view="instagram" data-caption="Mis publicaciones, en un solo lugar" aria-selected="false">
+          <span class="el-n">3</span><span class="el-sym">Ig</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg></span><span class="el-name">Instagram</span>
+        </a>
+        <a class="el" role="tab" href="#tiktok" data-view="tiktok" data-caption="Mis videos, en un solo lugar" aria-selected="false">
+          <span class="el-n">4</span><span class="el-sym">Tk</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.5 3v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.5 3c.3 2.4 1.9 4.2 4.5 4.4"/></svg></span><span class="el-name">TikTok</span>
+        </a>
+        <a class="el" role="tab" href="#actividad" data-view="actividad" data-caption="Lo más reciente, ordenado por fecha" aria-selected="false">
+          <span class="el-n">5</span><span class="el-sym">Ac</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span><span class="el-name">Actividad</span>
+        </a>
+        <a class="el" role="tab" href="#sobre-mi" data-view="sobre-mi" data-caption="Rigor técnico, lenguaje claro" aria-selected="false">
+          <span class="el-n">6</span><span class="el-sym">Sm</span><span class="el-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg></span><span class="el-name">Sobre mí</span>
+        </a>
       </nav>
       <p class="hint" id="hint" aria-live="polite">Todo lo que publico, de lo más nuevo a lo más antiguo</p>
     </div>
