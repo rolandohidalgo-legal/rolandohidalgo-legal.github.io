@@ -123,7 +123,10 @@ content:
       - { name: tagline, label: Frase de presentación (bajo los roles), type: text }
       - { name: bio, label: Biografía corta (va al pie de cada artículo), type: text }
       - { name: description, label: Descripción para buscadores, type: text }
-      - { name: email, label: Correo de contacto, type: string }
+      - name: whatsapp
+        label: WhatsApp (número con código de país, solo dígitos, ej. 593991234567)
+        type: string
+      - { name: whatsapp_text, label: Mensaje que llega precargado en WhatsApp, type: string }
       - { name: instagram, label: Usuario de Instagram (sin @), type: string }
       - { name: tiktok, label: Usuario de TikTok (sin @), type: string }
       - name: links

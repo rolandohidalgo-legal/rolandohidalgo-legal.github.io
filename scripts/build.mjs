@@ -200,7 +200,12 @@ const roles = (site.roles || []).map(String).filter(Boolean);
 const rolesHtml = roles.length
   ? `<p class="roles"><span class="sr-only">${esc(roles.join(', '))}</span><span class="typed" id="typed" aria-hidden="true" data-roles="${esc(JSON.stringify(roles))}">${esc(roles[0])}</span><span class="caret" aria-hidden="true"></span></p>`
   : '';
+// WhatsApp: si no hay número cargado, se quitan los botones que lo usan
+const waNum = String(site.whatsapp || '').replace(/\D/g, '');
+const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(site.whatsapp_text || 'Hola Rolando, vi tu sitio y quisiera hacerte una consulta.')}` : '';
+if (!waNum) console.warn('⚠ Falta el número de WhatsApp en Datos del sitio: se ocultan los botones de WhatsApp');
 const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8')
+  .replace(/<(a|p)\b[^>]*\bdata-wa\b[^>]*>[\s\S]*?<\/\1>\s*/g, (m) => (waNum ? m.replaceAll('{{WA}}', esc(waUrl)) : ''))
   .replace('<!--ROLES-->', rolesHtml)
   .replace('<!--TAGLINE-->', esc(site.tagline || site.bio || ''))
   .replace('<!--META-->',

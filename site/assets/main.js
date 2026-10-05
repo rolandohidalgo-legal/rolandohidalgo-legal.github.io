@@ -39,8 +39,8 @@
   var year = $('#year'); if (year) year.textContent = new Date().getFullYear();
 
   // ---------- portada ----------
+  if (!$('#tabs-bar')) return;
   var all = $('#all');
-  if (!all) return;
 
   var TT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 3v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.5 3c.3 2.4 1.9 4.2 4.5 4.4"/></svg>';
   var SOURCES = [
@@ -53,7 +53,7 @@
 
   // Navegación con casillas tipo tabla periódica. Al pasar el puntero se muestra la descripción
   // de la sección; al hacer clic cambia el contenido. La URL (#blog, #instagram…) recuerda la elección.
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.el'));
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab[data-view]'));
   var hint = $('#hint'), views = {}, current = null, selected = tabs[0], capT = null;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var sentinel = $('#tabs-sentinel'), tbar = $('#tabs-bar');
@@ -72,20 +72,21 @@
     hint.classList.add('swap');
     capT = setTimeout(function () { hint.textContent = text; hint.classList.remove('swap'); }, reduced ? 0 : 140);
   }
-  tabs.forEach(function (t) {
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
     t.addEventListener('pointerenter', function () { setCaption(t.dataset.caption); });
     t.addEventListener('focus', function () { setCaption(t.dataset.caption); });
+    if (!t.dataset.view) return;                      // WhatsApp: enlace externo, sin vista propia
     t.addEventListener('click', function (e) {
       e.preventDefault();
       if (location.hash === '#' + t.dataset.view) show(t.dataset.view, true);
       else location.hash = t.dataset.view;
     });
   });
-  var navEl = $('.elements');
+  var navEl = $('.tabs');
   if (navEl) navEl.addEventListener('pointerleave', function () { setCaption(selected.dataset.caption); });
 
   function show(id, scroll) {
-    if (!views[id]) id = 'todo';
+    if (!views[id]) id = tabs[0].dataset.view;
     if (id === current) { if (scroll) toBar(); return; }
     current = id;
     tabs.forEach(function (t) {
@@ -107,7 +108,7 @@
     var start = sentinel.getBoundingClientRect().top + window.scrollY;
     if (window.scrollY > start) window.scrollTo({ top: start, behavior: reduced ? 'auto' : 'smooth' });
   }
-  function fromHash() { return decodeURIComponent(location.hash.slice(1)) || 'todo'; }
+  function fromHash() { return decodeURIComponent(location.hash.slice(1)) || tabs[0].dataset.view; }
   window.addEventListener('hashchange', function () { show(fromHash(), true); });
   show(fromHash(), false);
   if (hint) hint.textContent = selected.dataset.caption;
@@ -175,7 +176,6 @@
       var a = el('a', null, l.label); a.href = l.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
       box.appendChild(a);
     });
-    if (site.email) { var m = $('#mail'); if (m) { m.textContent = site.email; m.href = 'mailto:' + site.email; } var c = $('#cta-mail'); if (c) c.href = 'mailto:' + site.email; }
   }
 
   function meta(kind, date, extra, sample) {
@@ -218,6 +218,7 @@
 
   // "Todo": entradas del blog y publicaciones de todas las redes, mezcladas por fecha
   function renderFeed(posts, social) {
+    if (!all) return;
     all.replaceChildren();
     var items = posts.map(function (p) { return { t: 'blog', d: p.date, v: p }; })
       .concat(social.map(function (x) { return { t: 'social', d: x.v.date, v: x.v, src: x.src }; }));
