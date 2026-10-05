@@ -1,0 +1,130 @@
+# Panel de edición (Pages CMS): https://app.pagescms.org
+# Cada formulario guarda un archivo en este repositorio; GitHub publica el sitio solo.
+media:
+  input: site/images
+  output: /images
+  rename: safe
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: blog
+    label: Artículos
+    type: collection
+    path: content/blog
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, section, date, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Titular
+        type: string
+        required: true
+        description: Corto y concreto. Es lo que se lee primero en WhatsApp y LinkedIn.
+      - name: dek
+        label: Bajada
+        type: text
+        description: Una o dos frases bajo el titular. También es la descripción al compartir.
+      - name: section
+        label: Sección
+        type: select
+        default: Análisis
+        options:
+          values: [Análisis, Opinión, Sentencias, Derecho y tecnología, Práctica profesional, Personal]
+      - name: date
+        label: Fecha de publicación
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: cover
+        label: Foto de portada (opcional)
+        type: image
+        description: Horizontal, mínimo 1600 px de ancho. Si no hay foto, la tarjeta para redes se arma solo con tipografía.
+        options:
+          path: site/images/portadas
+      - name: cover_caption
+        label: Pie de foto / crédito
+        type: string
+      - name: draft
+        label: Borrador (no publicar todavía)
+        type: boolean
+        default: false
+      - name: sample
+        label: Es contenido de ejemplo
+        type: boolean
+        default: false
+      - name: body
+        label: Texto
+        type: rich-text
+        options:
+          format: markdown
+          path: site/images/articulos
+
+  - name: instagram
+    label: Instagram
+    type: file
+    path: site/data/instagram.json
+    format: json
+    list: true
+    fields:
+      - { name: date, label: Fecha, type: date, options: { format: yyyy-MM-dd } }
+      - { name: caption, label: Texto, type: string }
+      - { name: url, label: Enlace a la publicación, type: string }
+      - { name: image, label: Miniatura, type: image, options: { path: site/images/redes } }
+      - { name: sample, label: Es ejemplo, type: boolean, default: false }
+
+  - name: tiktok
+    label: TikTok
+    type: file
+    path: site/data/tiktok.json
+    format: json
+    list: true
+    fields:
+      - { name: date, label: Fecha, type: date, options: { format: yyyy-MM-dd } }
+      - { name: caption, label: Texto, type: string }
+      - { name: url, label: Enlace al video, type: string }
+      - { name: image, label: Miniatura, type: image, options: { path: site/images/redes } }
+      - { name: sample, label: Es ejemplo, type: boolean, default: false }
+
+  - name: activity
+    label: Actividad
+    type: file
+    path: site/data/activity.json
+    format: json
+    list: true
+    fields:
+      - { name: date, label: Fecha, type: date, options: { format: yyyy-MM-dd } }
+      - name: type
+        label: Tipo
+        type: select
+        options:
+          values: [Blog, Instagram, TikTok, Lectura, Proyecto, Audiencia, Evento, Nota]
+      - { name: text, label: Qué pasó, type: string }
+      - { name: url, label: Enlace (opcional), type: string }
+      - { name: sample, label: Es ejemplo, type: boolean, default: false }
+
+  - name: site
+    label: Datos del sitio
+    type: file
+    path: site/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Nombre, type: string }
+      - { name: url, label: Dirección del sitio, type: string, description: "No cambiar salvo que conectes un dominio propio." }
+      - { name: role, label: Cargo corto, type: string }
+      - { name: bio, label: Biografía corta (va al pie de cada artículo), type: text }
+      - { name: description, label: Descripción para buscadores, type: text }
+      - { name: email, label: Correo de contacto, type: string }
+      - { name: instagram, label: Usuario de Instagram (sin @), type: string }
+      - { name: tiktok, label: Usuario de TikTok (sin @), type: string }
+      - name: links
+        label: Otros enlaces (LinkedIn, YouTube…)
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Nombre, type: string }
+          - { name: url, label: Enlace (https://…), type: string }

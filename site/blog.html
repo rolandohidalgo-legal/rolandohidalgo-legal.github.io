@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Redirigiendo…</title>
+<meta name="robots" content="noindex">
+<script>
+  // Las entradas antiguas vivían en blog.html#slug; ahora cada una tiene su propia dirección.
+  var s = location.hash.slice(1);
+  location.replace(/^[a-z0-9-]+$/.test(s) ? '/blog/' + s + '/' : '/#blog');
+</script>
+</head>
+<body><p><a href="/#blog">Ir al blog</a></p></body>
+</html>
