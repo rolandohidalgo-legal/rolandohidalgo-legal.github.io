@@ -8,7 +8,7 @@ date: 2026-10-04
 cover: /images/portadas/screenshot12.png
 cover_caption: Revisando algún expediente, en mi oficina de Ibarra.
 draft: false
-sample: true
+sample: false
 ---
 Este es un texto de ejemplo. Sirve para ver cómo se lee un artículo en el sitio, y se reemplaza por la primera publicación real.
 
