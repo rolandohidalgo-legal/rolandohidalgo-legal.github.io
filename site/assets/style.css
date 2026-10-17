@@ -274,27 +274,18 @@ a.item:hover .lead-cover img { transform: scale(1.03); }
 .closing-statement { padding-block: clamp(56px, 12vw, 110px) clamp(40px, 8vw, 80px); }
 .closing-statement .statement { margin: 0; font-size: clamp(2rem, 8.4vw, 3.6rem); line-height: 1.1; }
 
-/* ===== pie: el letrero (bloque rayado con el nombre) sobre una banda clara; en modo oscuro se invierte ===== */
-:root { --sign-block: #26231e; --sign-tex: #6a6154; --sign-letters: #f4eee2; --sign-dot: #e0806e; --foot-bg: #f1ebde; --foot-ink: #26231e; --foot-dot: #a23c30; }
-:root[data-theme="dark"] { --sign-block: #efe7d6; --sign-tex: #b9ad94; --sign-letters: #26231e; --sign-dot: #c8553e; --foot-bg: #14120f; --foot-ink: #efe9de; --foot-dot: #e0806e; }
-.sg-block { fill: var(--sign-block); }
-.sg-over { stroke: var(--sign-block); }
-.sg-tex { stroke: var(--sign-tex); }
-.sg-letters { fill: var(--sign-letters); }
-.sg-dotline { stroke: var(--sign-dot); }
-.site-footer { background: var(--foot-bg); color: var(--foot-ink); margin-top: clamp(30px, 6vw, 60px); padding: clamp(48px, 9vw, 96px) 24px calc(44px + env(safe-area-inset-bottom)); text-align: center; }
+/* ===== pie: banda oscura con el nombre en cursiva, grande, como cierre ===== */
+:root { --foot-bg: #26231e; --foot-ink: #f4eee2; --foot-dot: #e0806e; }
+:root[data-theme="dark"] { --foot-bg: #0f0d0b; }
+.site-footer { background: var(--foot-bg); color: var(--foot-ink); margin-top: clamp(30px, 6vw, 60px); padding: clamp(56px, 11vw, 120px) 24px calc(44px + env(safe-area-inset-bottom)); text-align: center; }
 .sf-in { max-width: 980px; margin: 0 auto; }
-.sf-mark { display: block; width: min(600px, 100%); margin: 0 auto; }
-.sf-mark svg { display: block; width: 100%; height: auto; }
-.sf-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 30px; margin-top: clamp(26px, 5vw, 44px); font-family: var(--sans); font-size: .98rem; }
+.sf-mark { display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(3.8rem, 19vw, 11rem); line-height: .95; letter-spacing: -.03em; color: var(--foot-ink); padding-right: .04em; }
+.sf-dot { color: var(--foot-dot); }
+.sf-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 30px; margin-top: clamp(28px, 6vw, 52px); font-family: var(--sans); font-size: .98rem; }
 .sf-nav a { color: var(--foot-ink); opacity: .86; padding-block: 6px; border-bottom: 1px solid transparent; transition: opacity .2s, border-color .2s; }
 .sf-nav a:hover, .sf-nav a:focus-visible { opacity: 1; border-color: var(--foot-dot); }
-.sf-small { margin: clamp(28px, 6vw, 48px) 0 0; font-family: var(--sans); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; opacity: .6; }
+.sf-small { margin: clamp(32px, 7vw, 56px) 0 0; font-family: var(--sans); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; opacity: .55; }
 .sf-small a:hover { opacity: 1; }
-/* el punto se dibuja con el bolígrafo al llegar al pie (main.js activa estas clases) */
-.sign-armed .sg-dotline { stroke-dasharray: 1 2; stroke-dashoffset: 1; }
-.sign-armed.sign-drawn .sg-dotline { stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s cubic-bezier(.4, .1, .3, 1); }
-.sign-armed.sign-drawn .sg-dotline + .sg-dotline { transition-delay: 1s; transition-duration: .7s; }
 /* En el celular, los navegadores de WhatsApp e Instagram dibujan una barra flotante abajo: se deja espacio para no taparlo */
 @media (hover: none) { .site-footer { padding-bottom: calc(112px + env(safe-area-inset-bottom)); } }
 
