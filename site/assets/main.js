@@ -90,6 +90,16 @@
     }
   }
 
+  // ---------- el punto del letrero se dibuja al llegar al pie ----------
+  var sign = $('.sf-mark');
+  if (sign && rvMotion && 'IntersectionObserver' in window) {
+    sign.classList.add('sign-armed');
+    var signIO = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { sign.classList.add('sign-drawn'); signIO.disconnect(); }
+    }, { threshold: 0.6 });
+    signIO.observe(sign);
+  }
+
   // ---------- portada ----------
   if (!$('#tabs-bar')) return;
   // Navegación en píldoras. Al pasar el puntero el texto da paso al ícono y se muestra la descripción

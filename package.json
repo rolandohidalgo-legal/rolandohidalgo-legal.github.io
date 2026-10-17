@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "brand": "node scripts/brand.mjs"
   },
   "dependencies": {
     "@fontsource/gelasio": "^5.3.0",
@@ -13,5 +14,8 @@
     "marked": "^18.0.14",
     "satori": "^0.35.0",
     "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "opentype.js": "^2.0.0"
   }
 }

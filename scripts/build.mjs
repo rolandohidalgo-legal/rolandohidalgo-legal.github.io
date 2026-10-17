@@ -32,9 +32,10 @@ const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(site.wha
 if (!waNum) console.warn('⚠ Falta el número de WhatsApp en Datos del sitio: se ocultan los botones de WhatsApp');
 const extraLinks = (site.links || []).filter((l) => l && l.label && /^https:\/\//.test(l.url || ''))
   .map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`).join('\n      ');
+const signSvg = fs.readFileSync(path.join(SRC, 'assets', 'brand', 'letrero.svg'), 'utf8').trim();
 const footerHtml = `<footer class="site-footer">
   <div class="sf-in">
-    <a class="sf-mark" href="/" aria-label="${esc(site.name)}, inicio"><span class="sf-name">Rolando</span><span class="sf-dot">.</span></a>
+    <a class="sf-mark" href="/" aria-label="${esc(site.name)}, inicio">${signSvg}</a>
     <nav class="sf-nav" aria-label="Pie de página">
       <a href="/#sobre-mi">Sobre mí</a>
       <a href="/#blog">Blog</a>
