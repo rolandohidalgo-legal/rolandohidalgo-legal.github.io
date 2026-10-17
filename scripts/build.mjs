@@ -26,6 +26,30 @@ const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 
 const longDate = (s) => { const [y, m, d] = s.split('-').map(Number); return y ? `${d} de ${MONTHS[m - 1]} de ${y}` : ''; };
 const abs = (p) => (/^https?:\/\//.test(p) ? p : BASE + (p.startsWith('/') ? p : '/' + p));
 
+// ---------- WhatsApp y pie de página (comunes a todas las páginas) ----------
+const waNum = String(site.whatsapp || '').replace(/\D/g, '');
+const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(site.whatsapp_text || 'Hola Rolando, vi tu sitio y quisiera hacerte una consulta.')}` : '';
+if (!waNum) console.warn('⚠ Falta el número de WhatsApp en Datos del sitio: se ocultan los botones de WhatsApp');
+const extraLinks = (site.links || []).filter((l) => l && l.label && /^https:\/\//.test(l.url || ''))
+  .map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`).join('\n      ');
+const footerHtml = `<footer class="site-footer">
+  <div class="sf-in">
+    <a class="sf-mark" href="/" aria-label="${esc(site.name)}, inicio"><span class="sf-name">Rolando</span><span class="sf-dot">.</span></a>
+    <nav class="sf-nav" aria-label="Pie de página">
+      <a href="/#sobre-mi">Sobre mí</a>
+      <a href="/#blog">Blog</a>
+      <a href="/#actividad">Actividad</a>
+      <a data-wa href="{{WA}}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      ${extraLinks}
+    </nav>
+    <p class="sf-small">${esc(site.name)} · ${new Date().getFullYear()} · <a href="/feed.xml">RSS</a></p>
+  </div>
+</footer>`;
+// Inserta el pie y resuelve los elementos de WhatsApp (si no hay número, se quitan)
+const finalize = (html) => html
+  .replace('<!--FOOTER-->', footerHtml)
+  .replace(/<(a|p|div)\b[^>]*\bdata-wa\b[^>]*>[\s\S]*?<\/\1>\s*/g, (m) => (waNum ? m.replaceAll('{{WA}}', esc(waUrl)) : ''));
+
 // ---------- 1. copia lo estático ----------
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.cpSync(SRC, OUT, { recursive: true });
@@ -169,12 +193,9 @@ ${marked.parse(p.body)}
       <div><p class="author-name">${esc(site.name)}</p><p class="author-bio">${esc(site.bio || '')}</p></div>
     </div>
     ${moreHtml}
-    <div class="foot-note">
-      <span>${esc(site.name)} · <span id="year">${new Date().getFullYear()}</span></span>
-      <a href="/feed.xml">RSS</a>
-    </div>
   </div>
 </article>
+<!--FOOTER-->
 <script src="/assets/main.js"></script>
 <script src="/assets/article.js"></script>
 </body>
@@ -187,7 +208,7 @@ for (const p of posts) {
   const cover = await coverFor(p);
   const more = posts.filter((x) => x !== p).slice(0, 3);
   fs.mkdirSync(path.join(OUT, 'blog', p.slug), { recursive: true });
-  fs.writeFileSync(path.join(OUT, 'blog', p.slug, 'index.html'), articlePage(p, cover, more));
+  fs.writeFileSync(path.join(OUT, 'blog', p.slug, 'index.html'), finalize(articlePage(p, cover, more)));
   fs.writeFileSync(path.join(OUT, 'og', `${p.slug}.png`), await ogImage({ title: p.title, kicker: p.section, dek: p.dek, date: longDate(p.date), cover: cover?.src, site }));
   index.push({ slug: p.slug, url: `/blog/${p.slug}/`, title: p.title, summary: p.dek, section: p.section, date: p.date, minutes: p.minutes, cover: cover?.rel || '', sample: p.sample });
   console.log(`✓ ${p.slug}`);
@@ -200,17 +221,13 @@ const roles = (site.roles || []).map(String).filter(Boolean);
 const rolesHtml = roles.length
   ? `<p class="roles"><span class="sr-only">${esc(roles.join(', '))}</span><span class="typed" id="typed" aria-hidden="true" data-roles="${esc(JSON.stringify(roles))}">${esc(roles[0])}</span><span class="caret" aria-hidden="true"></span></p>`
   : '';
-// WhatsApp: si no hay número cargado, se quitan los botones que lo usan
-const waNum = String(site.whatsapp || '').replace(/\D/g, '');
-const waUrl = waNum ? `https://wa.me/${waNum}?text=${encodeURIComponent(site.whatsapp_text || 'Hola Rolando, vi tu sitio y quisiera hacerte una consulta.')}` : '';
-if (!waNum) console.warn('⚠ Falta el número de WhatsApp en Datos del sitio: se ocultan los botones de WhatsApp');
-const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8')
-  .replace(/<(a|p)\b[^>]*\bdata-wa\b[^>]*>[\s\S]*?<\/\1>\s*/g, (m) => (waNum ? m.replaceAll('{{WA}}', esc(waUrl)) : ''))
+const home = finalize(fs.readFileSync(path.join(OUT, 'index.html'), 'utf8'))
   .replace('<!--ROLES-->', rolesHtml)
   .replace('<!--TAGLINE-->', esc(site.tagline || site.bio || ''))
   .replace('<!--META-->',
   socialMeta({ title: site.name, description: site.description || '', url: BASE + '/', image: `${BASE}/og/home.png`, type: 'website' }));
 fs.writeFileSync(path.join(OUT, 'index.html'), home);
+fs.writeFileSync(path.join(OUT, '404.html'), finalize(fs.readFileSync(path.join(OUT, '404.html'), 'utf8')));
 
 // ---------- 5. RSS, mapa del sitio y robots ----------
 const rss = `<?xml version="1.0" encoding="UTF-8"?>

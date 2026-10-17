@@ -64,32 +64,6 @@ content:
           format: markdown
           path: site/images/articulos
 
-  - name: instagram
-    label: Instagram
-    type: file
-    path: site/data/instagram.json
-    format: json
-    list: true
-    fields:
-      - { name: date, label: Fecha, type: date, options: { format: yyyy-MM-dd } }
-      - { name: caption, label: Texto, type: string }
-      - { name: url, label: Enlace a la publicación, type: string }
-      - { name: image, label: Miniatura, type: image, options: { path: site/images/redes } }
-      - { name: sample, label: Es ejemplo, type: boolean, default: false }
-
-  - name: tiktok
-    label: TikTok
-    type: file
-    path: site/data/tiktok.json
-    format: json
-    list: true
-    fields:
-      - { name: date, label: Fecha, type: date, options: { format: yyyy-MM-dd } }
-      - { name: caption, label: Texto, type: string }
-      - { name: url, label: Enlace al video, type: string }
-      - { name: image, label: Miniatura, type: image, options: { path: site/images/redes } }
-      - { name: sample, label: Es ejemplo, type: boolean, default: false }
-
   - name: activity
     label: Actividad
     type: file
@@ -127,10 +101,8 @@ content:
         label: WhatsApp (número con código de país, solo dígitos, ej. 593991234567)
         type: string
       - { name: whatsapp_text, label: Mensaje que llega precargado en WhatsApp, type: string }
-      - { name: instagram, label: Usuario de Instagram (sin @), type: string }
-      - { name: tiktok, label: Usuario de TikTok (sin @), type: string }
       - name: links
-        label: Otros enlaces (LinkedIn, YouTube…)
+        label: Enlaces del pie de página (LinkedIn, YouTube, Instagram…)
         type: object
         list: true
         fields:

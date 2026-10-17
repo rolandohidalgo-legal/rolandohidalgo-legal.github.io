@@ -23,10 +23,6 @@
     <h1 class="title">Rolando Hidalgo<span class="dot">.</span></h1>
     <!--ROLES-->
     <p class="tagline"><!--TAGLINE--></p>
-    <div class="cta">
-      <a class="btn solid" data-wa href="{{WA}}" target="_blank" rel="noopener noreferrer">Escríbeme por WhatsApp</a>
-      <a class="btn" href="#blog">Leer artículos <span aria-hidden="true">→</span></a>
-    </div>
   </header>
 </div>
 
@@ -38,8 +34,6 @@
         <a class="tab" role="tab" href="#sobre-mi" data-view="sobre-mi" data-caption="Rigor técnico, lenguaje claro" aria-selected="true"><span class="tab-t">Sobre mí</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg></span></a>
         <a class="tab" role="tab" href="#blog" data-view="blog" data-caption="Artículos: lo que no cabe en un video" aria-selected="false"><span class="tab-t">Blog</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="M13.5 6.5l4 4"/></svg></span></a>
         <a class="tab" role="tab" href="#actividad" data-view="actividad" data-caption="Lo más reciente, ordenado por fecha" aria-selected="false"><span class="tab-t">Actividad</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span></a>
-        <a class="tab" role="tab" href="#instagram" data-view="instagram" data-caption="Mis publicaciones, en un solo lugar" aria-selected="false"><span class="tab-t">Instagram</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg></span></a>
-        <a class="tab" role="tab" href="#tiktok" data-view="tiktok" data-caption="Mis videos, en un solo lugar" aria-selected="false"><span class="tab-t">TikTok</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.5 3v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.5 3c.3 2.4 1.9 4.2 4.5 4.4"/></svg></span></a>
         <a class="tab" data-wa href="{{WA}}" target="_blank" rel="noopener noreferrer" data-caption="Escríbeme directamente"><span class="tab-t">WhatsApp</span><span class="tab-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4l-4.5 1.1Z"/><path d="M9 8.6c.2 2.9 2.6 5.6 6.2 6.4l1.1-1.3-2-1-.8.8c-1-.4-2.2-1.6-2.6-2.6l.8-.8-1-2L9.4 8.6"/></svg></span></a>
       </nav>
       <p class="hint" id="hint" aria-live="polite">Rigor técnico, lenguaje claro</p>
@@ -49,8 +43,8 @@
 
 <main class="col">
   <section class="view show" id="v-sobre-mi" role="tabpanel" aria-label="Sobre mí">
+    <p class="statement" data-reveal>Soy abogado y ejerzo en Ecuador. Me interesa entender a fondo la norma, el precedente y el problema real de cada persona antes de opinar.</p>
     <div class="prose">
-      <p>Soy abogado y ejerzo en Ecuador. Me interesa entender a fondo la norma, el precedente y el problema real de cada persona antes de opinar.</p>
       <p>Estudio y comento decisiones judiciales, y las convierto en contenido para quien no es abogado. Este sitio reúne todo eso en un solo lugar.</p>
     </div>
     <dl class="facts">
@@ -65,30 +59,16 @@
     <div class="feed" id="posts"></div>
   </section>
 
-  <section class="view" id="v-instagram" role="tabpanel" aria-label="Instagram" hidden>
-    <a class="link follow-link" id="ig-follow" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
-    <div class="grid" id="grid-instagram"></div>
-  </section>
-
-  <section class="view" id="v-tiktok" role="tabpanel" aria-label="TikTok" hidden>
-    <a class="link follow-link" id="tt-follow" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
-    <div class="grid" id="grid-tiktok"></div>
-  </section>
-
   <section class="view" id="v-actividad" role="tabpanel" aria-label="Actividad" hidden>
     <div id="activity"></div>
   </section>
 
-  <section class="closing">
-    <hr class="rule" style="margin-bottom:34px">
-    <p class="kind-words" id="contacto" data-wa>¿Tienes una consulta? <a href="{{WA}}" target="_blank" rel="noopener noreferrer">Escríbeme por WhatsApp</a><span id="socials"></span></p>
-    <p class="sign">— Rolando Hidalgo</p>
-    <div class="foot-note">
-      <span>Rolando Hidalgo · <span id="year">2026</span></span>
-      <a href="/feed.xml">RSS</a>
-    </div>
+  <section class="closing-statement">
+    <p class="statement" data-reveal>El rigor que exige el caso. La claridad que merece el cliente.</p>
   </section>
 </main>
+
+<!--FOOTER-->
 
 <script src="/assets/main.js"></script>
 </body>

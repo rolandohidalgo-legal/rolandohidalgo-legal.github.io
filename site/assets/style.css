@@ -266,3 +266,32 @@ a.item:hover .lead-cover img { transform: scale(1.03); }
   .cover figcaption { padding-inline: 24px; }
 }
 @media print { .progress, .share, .theme, .more { display: none; } }
+
+/* ===== títulos que ganan contraste al avanzar (se activan con main.js) ===== */
+.statement { font-size: clamp(1.7rem, 6.2vw, 2.7rem); line-height: 1.18; font-weight: 700; letter-spacing: -.02em; margin: 0 0 1.1em; text-wrap: balance; }
+.rv-w { transition: opacity .18s linear; }
+.md h2 .rv-w { transition-duration: .12s; }
+.closing-statement { padding-block: clamp(56px, 12vw, 110px) clamp(40px, 8vw, 80px); }
+.closing-statement .statement { margin: 0; font-size: clamp(2rem, 8.4vw, 3.6rem); line-height: 1.1; }
+
+/* ===== pie: banda oscura con el nombre en cursiva, grande, como cierre ===== */
+:root { --foot-bg: #26231e; --foot-ink: #f4eee2; --foot-dot: #e0806e; }
+:root[data-theme="dark"] { --foot-bg: #0f0d0b; }
+.site-footer { background: var(--foot-bg); color: var(--foot-ink); margin-top: clamp(30px, 6vw, 60px); padding: clamp(56px, 11vw, 120px) 24px calc(44px + env(safe-area-inset-bottom)); text-align: center; }
+.sf-in { max-width: 980px; margin: 0 auto; }
+.sf-mark { display: inline-block; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(3.8rem, 19vw, 11rem); line-height: .95; letter-spacing: -.03em; color: var(--foot-ink); padding-right: .04em; }
+.sf-dot { color: var(--foot-dot); }
+.sf-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 30px; margin-top: clamp(28px, 6vw, 52px); font-family: var(--sans); font-size: .98rem; }
+.sf-nav a { color: var(--foot-ink); opacity: .86; padding-block: 6px; border-bottom: 1px solid transparent; transition: opacity .2s, border-color .2s; }
+.sf-nav a:hover, .sf-nav a:focus-visible { opacity: 1; border-color: var(--foot-dot); }
+.sf-small { margin: clamp(32px, 7vw, 56px) 0 0; font-family: var(--sans); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; opacity: .55; }
+.sf-small a:hover { opacity: 1; }
+/* En el celular, los navegadores de WhatsApp e Instagram dibujan una barra flotante abajo: se deja espacio para no taparlo */
+@media (hover: none) { .site-footer { padding-bottom: calc(112px + env(safe-area-inset-bottom)); } }
+
+/* ===== móvil: las cuatro píldoras caben sin deslizar ===== */
+@media (max-width: 560px) {
+  .tabs { -webkit-mask-image: none; mask-image: none; justify-content: space-between; }
+  .tab { padding: 8px 10px; font-size: .88rem; }
+  .tabs-in { padding-block: 20px 16px; }
+}
