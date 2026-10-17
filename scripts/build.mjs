@@ -87,7 +87,7 @@ async function coverFor(p) {
 }
 
 // ---------- 3. página de cada artículo ----------
-const ICON = '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%2326231e%27/%3E%3Ctext x=%2715%27 y=%2723%27 font-size=%2722%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3ER%3C/text%3E%3Ccircle cx=%2725%27 cy=%2723%27 r=%272.6%27 fill=%27%23e0806e%27/%3E%3C/svg%3E">';
+const ICON = '<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">';
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&display=swap">';
 const THEME_BTN = '<button class="theme" id="theme" type="button" aria-label="Cambiar tema claro u oscuro"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>';
 
