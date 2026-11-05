@@ -7,6 +7,13 @@ ingeniería inversa (F4b.1–F4b.3); si F4b aún no existe, hacer I-02 solo con 
 disección cuando F4b esté listo.
 **Lee antes:** `specs/base-de-conocimiento.md` completo.
 
+## Atajo: informes desde el vault
+Antes de las entrevistas, el agente que tiene acceso al vault de Obsidian corre
+[`prompts/informes-desde-vault.md`](../prompts/informes-desde-vault.md). Las entrevistas (F0b.2) solo
+cubren después los vacíos que ese informe deja listados en `00-resumen.md`. Para importar sus salidas:
+`contexto/*` → `data/contexto/`, `ideas.csv` → se agrega a `data/ideas.csv`,
+`preguntas.csv` → `data/conocimiento/`, `watchlist.csv` → `data/competencia/`, y los informes → `data/informes/diagnostico/`.
+
 ## Tareas
 
 ### F0b.1 Estructura y skill de entrevista
