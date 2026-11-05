@@ -19,6 +19,7 @@ const POSTS_DIR = path.join(ROOT, 'content', 'blog');
 
 const site = JSON.parse(fs.readFileSync(path.join(SRC, 'data', 'site.json'), 'utf8'));
 const BASE = String(site.url || '').replace(/\/$/, '');
+const REPO = String(site.repo || 'https://github.com/rolandohidalgo-legal/rolandohidalgo-legal.github.io');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const isoDate = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d || '').slice(0, 10));
@@ -42,7 +43,8 @@ const footerHtml = `<footer class="site-footer">
       <a data-wa href="{{WA}}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
       ${extraLinks}
     </nav>
-    <p class="sf-small">${esc(site.name)} · ${new Date().getFullYear()} · <a href="/feed.xml">RSS</a></p>
+    <p class="sf-colophon">Hecho a mano con HTML, CSS y JavaScript, sin frameworks ni cookies. <a href="${esc(REPO)}" target="_blank" rel="noopener noreferrer">Código abierto</a>.</p>
+    <p class="sf-small">${esc(site.name)} · ${new Date().getFullYear()} · <a href="/feed.xml">RSS</a> · <span class="sf-kbd">Pulsa <kbd>Ctrl</kbd> <kbd>K</kbd> para navegar</span></p>
   </div>
 </footer>`;
 // Inserta el pie y resuelve los elementos de WhatsApp (si no hay número, se quitan)
@@ -87,8 +89,8 @@ async function coverFor(p) {
 
 // ---------- 3. página de cada artículo ----------
 const ICON = '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%2326231e%27/%3E%3Ctext x=%2715%27 y=%2723%27 font-size=%2722%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3ER%3C/text%3E%3Ccircle cx=%2725%27 cy=%2723%27 r=%272.6%27 fill=%27%23e0806e%27/%3E%3C/svg%3E">';
-const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&display=swap">';
-const THEME_BTN = '<button class="theme" id="theme" type="button" aria-label="Cambiar tema claro u oscuro"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>';
+const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">';
+const THEME_BTN = '<div class="tools"><button class="theme" id="theme" type="button" aria-label="Cambiar tema claro u oscuro"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></div>';
 
 function socialMeta({ title, description, url, image, type, date, section }) {
   return [
@@ -137,9 +139,60 @@ function shareBar(p, url) {
 </div>`;
 }
 
+
+// ---------- notas al margen, subtítulos con ancla e índice ----------
+// Una nota se escribe como en Markdown: "texto[^1]" y, en cualquier línea aparte, "[^1]: contenido de la nota".
+// El editor del panel a veces escapa los corchetes (\[^1\]); se aceptan ambas formas.
+function withNotes(md) {
+  const code = [];   // lo que está entre comillas invertidas (código) no se toca
+  md = md.replace(/```[\s\S]*?```|`[^`\n]+`/g, (m) => `\u0000${code.push(m) - 1}\u0000`);
+  const defs = new Map();
+  md = md.replace(/^\\?\[\\?\^([\w-]+)\\?\]:[ \t]*(.+)$/gm, (_, id, text) => { defs.set(id, text.trim()); return ''; });
+  const order = new Map();
+  md = md.replace(/\\?\[\\?\^([\w-]+)\\?\]/g, (m, id) => {
+    if (!defs.has(id)) return m;
+    if (!order.has(id)) order.set(id, order.size + 1);
+    const k = order.get(id);
+    return `<span class="fn"><button class="fn-ref" type="button" aria-expanded="false" aria-controls="sn-${k}" aria-label="Nota ${k}">${k}</button><span class="sidenote" id="sn-${k}" role="note"><span class="sn-n">${k}</span> ${marked.parseInline(defs.get(id).replace(/\u0000(\d+)\u0000/g, (_, i) => code[i]))}</span></span>`;
+  });
+  return md.replace(/\u0000(\d+)\u0000/g, (_, i) => code[i]);
+}
+const slugify = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// Convierte el texto del artículo a HTML y da a cada subtítulo (h2) un ancla para el índice
+function renderBody(md) {
+  const toc = [], used = new Set();
+  const html = marked.parse(withNotes(md)).replace(/<h2>([\s\S]*?)<\/h2>/g, (_, inner) => {
+    const text = inner.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
+    let id = slugify(text) || 'seccion', n = 2;
+    while (used.has(id)) id = `${slugify(text)}-${n++}`;
+    used.add(id);
+    toc.push({ id, text });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+  return { html, toc };
+}
+// Cita en formato APA: Apellido, I. (año, día de mes). Título. Sitio. URL
+function citation(p, url) {
+  const parts = String(site.name).trim().split(/\s+/);
+  const author = site.cite_as || (parts.length > 1 ? `${parts[parts.length - 1]}, ${parts[0].charAt(0)}.` : site.name);
+  const [y, m, d] = p.date.split('-').map(Number);
+  const when = y ? `${y}, ${d} de ${MONTHS[m - 1]}` : 's. f.';
+  return { author, when, title: p.title, site: site.name, url };
+}
+
 function articlePage(p, cover, more) {
   const url = `${BASE}/blog/${p.slug}/`;
-  const description = p.dek || p.body.replace(/[#>*_`\[\]()-]/g, '').trim().slice(0, 180);
+  const body = renderBody(p.body);
+  const cite = citation(p, url);
+  const tEnd = /[.?!…]$/.test(cite.title) ? '' : '.';   // sin punto doble tras "¿…?"
+  const citePlain = `${cite.author} (${cite.when}). ${cite.title}${tEnd} ${cite.site}. ${cite.url}`;
+  const tocHtml = body.toc.length >= 2 ? `<nav class="toc" aria-label="En este artículo">
+    <p class="eyebrow">En este artículo</p>
+    <ol>
+      ${body.toc.map((t, i) => `<li><a href="#${t.id}"><span class="toc-n">§${i + 1}</span><span>${esc(t.text)}</span></a></li>`).join('\n      ')}
+    </ol>
+  </nav>` : '';
+  const description = p.dek || p.body.replace(/^\\?\[\\?\^[\w-]+\\?\]:.*$/gm, '').replace(/\\?\[\\?\^[\w-]+\\?\]/g, '').replace(/[#>*_`\[\]()-]/g, '').trim().slice(0, 180);
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: p.title, description, datePublished: p.date, dateModified: p.date,
@@ -173,7 +226,7 @@ ${FONTS}
 </div>
 <article class="story">
   <header class="col story-head">
-    <p class="kicker">${esc(p.section)}${p.sample ? ' <span class="chip">Ejemplo</span>' : ''}</p>
+    <p class="kicker"><span class="sect" aria-hidden="true">§</span>${esc(p.section)}${p.sample ? ' <span class="chip">Ejemplo</span>' : ''}</p>
     <h1>${esc(p.title)}</h1>
     ${p.dek ? `<p class="dek">${esc(p.dek)}</p>` : ''}
     <div class="byline">
@@ -183,16 +236,23 @@ ${FONTS}
     </div>
   </header>
   ${cover ? `<figure class="cover"><img src="${cover.rel}" alt="${esc(p.caption || p.title)}" width="1600">${p.caption ? `<figcaption class="col">${esc(p.caption)}</figcaption>` : ''}</figure>` : ''}
-  <div class="col">
+  <div class="story-body">
+  ${tocHtml}
+  <div class="col story-main">
     <div class="md">
-${marked.parse(p.body)}
+${body.html}
     </div>
     ${shareBar(p, url)}
+    <section class="cite" aria-label="Cómo citar este artículo">
+      <div class="cite-head"><p class="eyebrow">Cómo citar este artículo</p><button class="btn small" type="button" data-cite="${esc(citePlain)}">Copiar cita</button></div>
+      <p class="cite-text">${esc(cite.author)} (${esc(cite.when)}). <i>${esc(cite.title)}</i>${tEnd} ${esc(cite.site)}. <span class="cite-url">${esc(cite.url)}</span></p>
+    </section>
     <div class="author">
       <div class="avatar" aria-hidden="true">${esc(site.name.charAt(0))}<span>.</span></div>
       <div><p class="author-name">${esc(site.name)}</p><p class="author-bio">${esc(site.bio || '')}</p></div>
     </div>
     ${moreHtml}
+  </div>
   </div>
 </article>
 <!--FOOTER-->
@@ -224,6 +284,7 @@ const rolesHtml = roles.length
 const home = finalize(fs.readFileSync(path.join(OUT, 'index.html'), 'utf8'))
   .replace('<!--ROLES-->', rolesHtml)
   .replace('<!--TAGLINE-->', esc(site.tagline || site.bio || ''))
+  .replace('<!--LOCATION-->', esc(site.location || 'Ecuador'))
   .replace('<!--META-->',
   socialMeta({ title: site.name, description: site.description || '', url: BASE + '/', image: `${BASE}/og/home.png`, type: 'website' }));
 fs.writeFileSync(path.join(OUT, 'index.html'), home);

@@ -41,7 +41,7 @@ function plain({ title, kicker, dek, date, site, home }) {
       dek ? h('div', { fontFamily: 'Gelasio', fontStyle: 'italic', fontSize: 30, lineHeight: 1.35, color: C.muted, marginTop: 22, maxWidth: 980 }, clip(dek, 140)) : null),
     h('div', { justifyContent: 'space-between', alignItems: 'center', borderTop: `2px solid ${C.rule}`, paddingTop: 22 },
       h('div', sans(17, C.tan), home ? (site.url || '').replace(/^https?:\/\//, '') : `Por ${site.name}`),
-      h('div', sans(17, C.tan), home ? 'Blog · Instagram · TikTok' : date || '')));
+      h('div', sans(17, C.tan), home ? 'Derecho · Tecnología · Blog' : date || '')));
 }
 
 function withCover({ title, kicker, date, site }, img) {

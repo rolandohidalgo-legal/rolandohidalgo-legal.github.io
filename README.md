@@ -6,6 +6,9 @@ Sitio personal y blog de Rolando Hidalgo.
 - **Publicar:** automático. Cada cambio en `main` dispara `.github/workflows/deploy.yml`, que arma el sitio y lo publica en 1–2 minutos.
 - **Qué arma el script** (`scripts/build.mjs`): una página por artículo en `/blog/<slug>/` con etiquetas Open Graph, la imagen para redes de 1200×630 (`scripts/og.mjs`), RSS, mapa del sitio.
 
+- **Notas al margen en los artículos:** escribe `[^1]` donde va el número y, en una línea aparte, `[^1]: texto de la nota`. En pantallas anchas la nota aparece en el margen; en el celular se abre al tocar el número.
+- **Atajos:** `Ctrl K` (o `⌘K`, o `/`) abre la paleta para buscar artículos, ir a una sección o cambiar el tema.
+
 | Carpeta | Qué hay |
 |---|---|
 | `content/blog/` | Un `.md` por artículo (datos arriba, texto abajo) |

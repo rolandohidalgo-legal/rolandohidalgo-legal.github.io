@@ -14,7 +14,9 @@ Este es un texto de ejemplo. Sirve para ver cómo se lee un artículo en el siti
 
 ## Un lugar para lo que no cabe en un video
 
-Un video de un minuto obliga a recortar. Aquí puedo explicar una sentencia con calma, citar la norma completa y dejar mi razonamiento por escrito.
+Un video de un minuto obliga a recortar. Aquí puedo explicar una sentencia con calma, citar la norma completa y dejar mi razonamiento por escrito.[^1]
+
+[^1]: Así se ve una nota. En pantallas anchas aparece en el margen, junto al párrafo; en el celular se abre al tocar el número.
 
 > Las citas destacadas se ven así: grandes, en cursiva y con una línea de color a la izquierda.
 
@@ -26,5 +28,6 @@ Desde el panel de edición, cada artículo tiene un formulario con título, baja
 - **Negrita** y *cursiva*
 - Enlaces, como [la Asamblea Nacional](https://www.asambleanacional.gob.ec)
 - Listas y citas
+- Notas al margen: se escribe `[^1]` donde va el número y, en una línea aparte, `[^1]: el texto de la nota`
 
 Cuando exista un artículo real, este ejemplo se elimina.
