@@ -1,6 +1,41 @@
 [
   {
     "sample": true,
+    "date": "2026-11-03",
+    "type": "Blog",
+    "text": "Publiqué: La letra pequeña sí importa",
+    "url": "/blog/la-letra-pequena-si-importa/"
+  },
+  {
+    "sample": true,
+    "date": "2026-10-27",
+    "type": "Blog",
+    "text": "Publiqué: Cuando la IA inventa una sentencia",
+    "url": "/blog/cuando-la-ia-inventa-una-sentencia/"
+  },
+  {
+    "sample": true,
+    "date": "2026-10-20",
+    "type": "Blog",
+    "text": "Publiqué: Tus datos personales ya tienen ley",
+    "url": "/blog/tus-datos-personales-derechos/"
+  },
+  {
+    "sample": true,
+    "date": "2026-10-13",
+    "type": "Blog",
+    "text": "Publiqué: La acción de protección no es para todo",
+    "url": "/blog/accion-de-proteccion-no-es-para-todo/"
+  },
+  {
+    "sample": true,
+    "date": "2026-10-08",
+    "type": "Blog",
+    "text": "Publiqué: Motivar no es citar artículos",
+    "url": "/blog/motivar-no-es-citar-articulos/"
+  },
+  {
+    "sample": true,
     "date": "2026-10-04",
     "type": "Blog",
     "text": "Publiqué una entrada nueva en el blog.",
